@@ -33,45 +33,25 @@ public class ADDConnectionPool {
         pools.put(id, map);
     }
 
-    public static synchronized void onRollback(String id) {
+    public static synchronized void onRollback(String id) throws SQLException {
         if (pools.containsKey(id)) {
             Map<String, Connection> map = pools.get(id);
-            try {
-                try {
-                    rollback(map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } finally {
-                try {
-                    close(map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                pools.remove(id);
-            }
+            rollback(map);
         }
     }
 
-    public static synchronized void onCommit(String id) {
+    public static synchronized void onCommit(String id) throws SQLException {
         if (pools.containsKey(id)) {
             Map<String, Connection> map = pools.get(id);
-            try {
-                commit(map);
-            } catch (Exception e) {
-                try {
-                    rollback(map);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            } finally {
-                try {
-                    close(map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                pools.remove(id);
-            }
+            commit(map);
+        }
+    }
+
+    public static synchronized void onClose(String id) throws SQLException {
+        if (pools.containsKey(id)) {
+            Map<String, Connection> map = pools.get(id);
+            close(map);
+            pools.remove(id);
         }
     }
 

@@ -1,5 +1,6 @@
 package cn.wubo.apijson.dynamic.datasource.framework;
 
+import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,8 +35,9 @@ public class ADDAspect {
         // Just a PoinCut
     }
 
+    @SneakyThrows
     @Around("logPoinCut()")
-    public Object process(ProceedingJoinPoint point) throws Throwable {
+    public Object process(ProceedingJoinPoint point) {
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) point.getSignature();
         //获取切入点所在的方法
@@ -55,6 +57,8 @@ public class ADDAspect {
             } catch (Throwable e) {
                 ADDConnectionPool.onRollback(id);
                 throw e;
+            } finally {
+                ADDConnectionPool.onClose(id);
             }
         } else if (restController != null || service != null) {
             MDC.remove(ADDConstant.APIJSON_DYNAMIC_DATASOURCE_TRACE_ID);
