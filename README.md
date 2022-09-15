@@ -4,7 +4,7 @@
 
 2.批量进行增删改`saveBatch`
 
-3.批量增删改事务一致性和`ADDTransactional`
+3.批量增删改事务一致性`ADDTransactional`
 
 请求示例
 ```json
