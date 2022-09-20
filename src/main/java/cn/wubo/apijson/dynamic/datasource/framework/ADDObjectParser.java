@@ -5,9 +5,12 @@ import apijson.framework.APIJSONObjectParser;
 import apijson.framework.APIJSONSQLConfig;
 import apijson.orm.Join;
 import apijson.orm.SQLConfig;
+import cn.hutool.extra.spring.SpringUtil;
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
@@ -29,19 +32,25 @@ public class ADDObjectParser extends APIJSONObjectParser {
     public SQLConfig newSQLConfig(RequestMethod method, String table, String alias, JSONObject request, List<Join> joinList, boolean isProcedure) throws Exception {
         ADDSQLConfig ADDSQLConfig = (ADDSQLConfig) APIJSONSQLConfig.newSQLConfig(method, table, alias, request, joinList, isProcedure);
         Map<String, Object> map = getCustomMap();
+        String dsUrl = "";
+        String dsUserName = "";
+        String dsPassword = "";
         if (map != null && map.size() > 0 && map.containsKey("@dsUrl") && map.containsKey("@dsUserName") && map.containsKey("@dsPassword")) {
-            String dsUrl = String.valueOf(map.get("@dsUrl"));
-            String dsUserName = String.valueOf(map.get("@dsUserName"));
-            String dsPassword = String.valueOf(map.get("@dsPassword"));
-            int i = dsUrl.lastIndexOf("/");
-            int j = dsUrl.lastIndexOf("?");
-            String start = dsUrl.substring(0, i);
-            String end = dsUrl.substring(j);
-            String db = dsUrl.substring(i + 1, j);
-            ADDSQLConfig.setDb(start + end, dsUserName, dsPassword, db, "5.7.22");
+            dsUrl = String.valueOf(map.get("@dsUrl"));
+            dsUserName = String.valueOf(map.get("@dsUserName"));
+            dsPassword = String.valueOf(map.get("@dsPassword"));
         } else {
-            ADDSQLConfig.setDb("jdbc:mysql://10.133.92.80:3306?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true", "root", "Mysql@2020", "erp_dev_demo", "5.7.22");
+            DruidDataSource druidDataSource = (DruidDataSource) SpringUtil.getBean(DataSource.class);
+            dsUrl = druidDataSource.getUrl();
+            dsUserName = druidDataSource.getUsername();
+            dsPassword = druidDataSource.getPassword();
         }
+        int i = dsUrl.lastIndexOf("/");
+        int j = dsUrl.lastIndexOf("?");
+        String start = dsUrl.substring(0, i);
+        String end = dsUrl.substring(j);
+        String db = dsUrl.substring(i + 1, j);
+        ADDSQLConfig.setDb(start + end, dsUserName, dsPassword, db);
         return ADDSQLConfig;
     }
 }

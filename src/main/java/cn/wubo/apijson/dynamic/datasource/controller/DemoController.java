@@ -22,6 +22,7 @@ import cn.wubo.apijson.dynamic.datasource.controller.dto.RecordDTO;
 import cn.wubo.apijson.dynamic.datasource.framework.ADDTransactional;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,7 +68,9 @@ public class DemoController extends APIJSONController<Long> {
 	public JSONArray crud(@RequestBody List<RecordDTO> records, HttpSession session) {
 		JSONArray ja = new JSONArray();
 		for (RecordDTO rec : records) {
-			ja.add(JSON.parseObject(super.crud(rec.getMethod(), rec.getData().toJSONString(), session)));
+			JSONObject jo = JSON.parseObject(super.crud(rec.getMethod(), rec.getData().toJSONString(), session));
+			if(jo.containsKey("code") && jo.getInteger("code") != 200) throw new RuntimeException(jo.getString("msg"));
+			ja.add(jo);
 		}
 		return ja;
 	}

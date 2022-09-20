@@ -16,7 +16,6 @@ public class ADDSQLConfig extends APIJSONSQLConfig {
     private String url;
     private String username;
     private String password;
-    private String version;
     private String schema;
 
     @Override
@@ -24,17 +23,11 @@ public class ADDSQLConfig extends APIJSONSQLConfig {
         return schema;
     }
 
-    public void setDb(String url, String username, String password, String sechema, String version) {
+    public void setDb(String url, String username, String password, String sechema) {
         this.url = url;
         this.username = username;
         this.password = password;
         this.schema = sechema;
-        this.version = version;
-    }
-
-    @Override
-    public String getDBVersion() {
-        return version;
     }
 
     @JSONField(serialize = false)  // 不在日志打印 账号/密码 等敏感信息
