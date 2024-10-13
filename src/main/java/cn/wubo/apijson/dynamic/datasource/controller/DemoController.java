@@ -51,16 +51,24 @@ public class DemoController extends APIJSONController<Long> {
     }
 
     /**
-     * 批量处理增删改查
+     * 批量处理增删改查操作
      *
-     * @param records
-     * @param session
-     * @return
+     * 该方法用于批量处理数据库的增删改查操作，通过接收一个包含多个记录的列表，
+     * 并利用会话进行数据库操作，返回一个包含所有操作结果的JSONArray对象
+     *
+     * @param records 一个包含多个RecordDTO的列表，每个RecordDTO代表一个数据库操作
+     * @param session HTTP会话对象，用于在多个请求之间保持状态
+     * @return 返回一个JSONArray对象，包含每个操作的结果
+     *
+     * 注意：该方法使用了自定义的ADDTransactional注解，可能需要额外的配置来支持这种事务控制方式
+     *
+     * 可能的改进方向：
+     * - 考虑增加操作类型（增删改查）的枚举或者常量，以提高代码的可读性和可维护性
+     * - 对于错误处理，目前是直接抛出运行时异常，可以考虑返回具体的错误代码或者使用HTTP状态码来表示错误
      */
     @PostMapping(value = "saveBatch")
-    // 如果和其它的接口 URL 冲突，可以加前缀，例如改为 crud/{method} 或 Controller 注解 @RequestMapping("crud")
     @ADDTransactional
-    public JSONArray crud(@RequestBody List<RecordDTO> records, HttpSession session) {
+    public JSONArray saveBatch(@RequestBody List<RecordDTO> records, HttpSession session) {
         JSONArray ja = new JSONArray();
         for (RecordDTO rec : records) {
             JSONObject jo = JSON.parseObject(super.crud(rec.getMethod(), rec.getData().toJSONString(), session));
