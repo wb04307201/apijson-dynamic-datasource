@@ -19,10 +19,6 @@ import java.util.UUID;
 /**
  * ADDAspect
  * 用于事务管理一致性的提交和回滚
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.09.05
  */
 @Aspect
 @Component

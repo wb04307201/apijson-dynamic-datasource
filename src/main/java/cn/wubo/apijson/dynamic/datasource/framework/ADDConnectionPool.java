@@ -8,10 +8,6 @@ import java.util.Map;
 /**
  * ConnectionPool
  * 管理连接池，进行统一提交
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.09.05
  */
 public class ADDConnectionPool {
 

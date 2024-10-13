@@ -13,12 +13,8 @@ import java.sql.SQLException;
 /**
  * ZeroCodeSQLExecutor
  * 零代码SQL执行器
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.08.20
  */
-public class ADDSQLExecutor extends APIJSONSQLExecutor {
+public class ADDSQLExecutor<T extends Object> extends APIJSONSQLExecutor<T> {
 
     @Override
     public void rollback() throws SQLException {
