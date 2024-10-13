@@ -1,18 +1,31 @@
 # apijson-dynamic-datasource  
-# 动态数据源、批量增删改事务一致性DEMO
 
-[APIJSON](http://apijson.cn/)
+项目中简单的实现了如下特性：
+1. 使用APIJSON如何在
+2. 在进行跨表批量增删改时如何保持事务一致性
 
-## 1.动态传入数据源初始化链接
-> 示例中从前端传入了数据源信息  
-> 实际使用的时候请采用更加安全合理的方式  
-> 并注意在返回响应时去掉数据源相关信息
-## 2.批量进行增删改`saveBatch`
-> 不同的表进行批量增删改示例
-## 3.批量增删改事务一致性`ADDTransactional`
-> 示例中采用了注释+切面的方式，使saveBatch方法在统一数据源下，可以根据事务进行回滚
+[APIJSON更多信息请查看](http://apijson.cn/)
 
-请求示例
+## 原理简述
+
+在APIJSON的基础上，增加`@ADDTransactional`注解与AOP切面方法结合，找到跨表的批量操作并传递信号量，  
+根据信号量判断是否走源生commit事件，还是在AOP切面方法执行后统一commit  
+并增加对传入数据源信息参数的读取和使用  
+增加一个简单的连接池优化对数据库资源的使用
+
+![img.png](img.png)
+
+- **黑色**：原APIJSON代码
+- **红色**：增加的代码
+
+## 示例使用
+
+在[DemoController.java](src%2Fmain%2Fjava%2Fcn%2Fwubo%2Fapijson%2Fdynamic%2Fdatasource%2Fcontroller%2FDemoController.java)中增加saveBatch方法批量处理增删改查操作，  
+
+请求url:  
+http://localhost:8080/saveBatch
+
+请求示例:
 ```json
 [
   {

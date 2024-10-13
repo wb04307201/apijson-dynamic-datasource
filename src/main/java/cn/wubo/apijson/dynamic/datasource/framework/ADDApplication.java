@@ -12,10 +12,6 @@ import org.slf4j.LoggerFactory;
 /**
  * ADDApplication
  * apijson启动入口
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.09.05
  */
 public class ADDApplication extends APIJSONApplication {
 

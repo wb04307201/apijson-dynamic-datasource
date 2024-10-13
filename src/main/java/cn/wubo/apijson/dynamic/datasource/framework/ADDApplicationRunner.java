@@ -12,10 +12,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * ADDApplicationRunner
  * 项目启动时初始化paijson
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.09.05
  */
 @Configuration
 public class ADDApplicationRunner implements ApplicationRunner {

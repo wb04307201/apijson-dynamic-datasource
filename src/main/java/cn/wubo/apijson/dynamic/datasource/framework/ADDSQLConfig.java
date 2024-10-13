@@ -6,12 +6,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 /**
  * ZeroCodeSQLConfig
  * 零代码数据源配置
- *
- * @author 吴博
- * @version 1.0
- * @date 2022.08.20
  */
-public class ADDSQLConfig extends APIJSONSQLConfig {
+public class ADDSQLConfig<T extends Object> extends APIJSONSQLConfig<T> {
 
     private String url;
     private String username;

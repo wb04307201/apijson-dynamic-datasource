@@ -17,7 +17,7 @@ public class ADDParser<T extends Object> extends APIJSONParser<T> {
 
     // 创建对象解析器
     @Override
-    public APIJSONObjectParser createObjectParser(JSONObject request, String parentPath, SQLConfig arrayConfig
+    public APIJSONObjectParser<T> createObjectParser(JSONObject request, String parentPath, SQLConfig arrayConfig
             , boolean isSubquery, boolean isTable, boolean isArrayMainTable) throws Exception {
         return new ADDObjectParser(getSession(), request, parentPath, arrayConfig
                 , isSubquery, isTable, isArrayMainTable).setMethod(getMethod()).setParser(this);
